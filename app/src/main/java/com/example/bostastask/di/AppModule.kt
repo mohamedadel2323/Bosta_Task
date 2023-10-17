@@ -9,6 +9,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -37,7 +38,9 @@ object AppModule {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .build()
+            .addConverterFactory(
+                GsonConverterFactory.create()
+            ).build()
             .create(PlaceholderApiService::class.java)
     }
 }
