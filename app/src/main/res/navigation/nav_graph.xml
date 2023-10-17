@@ -18,5 +18,9 @@
         android:id="@+id/albumDetails"
         android:name="com.example.bostastask.albumdetails.presentation.AlbumDetailsFragment"
         android:label="fragment_album_details"
-        tools:layout="@layout/fragment_album_details" />
+        tools:layout="@layout/fragment_album_details" >
+        <argument
+            android:name="album"
+            app:argType="com.example.bostastask.profile.presentation.models.AlbumUiModel" />
+    </fragment>
 </navigation>

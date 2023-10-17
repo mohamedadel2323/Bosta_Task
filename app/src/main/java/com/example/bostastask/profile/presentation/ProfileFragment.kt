@@ -10,8 +10,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bostastask.R
 import com.example.bostastask.databinding.FragmentProfileBinding
+import com.example.bostastask.utils.visibleIf
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -22,6 +26,8 @@ import timber.log.Timber
 class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
+    private lateinit var albumAdapter: AlbumAdapter
+    private lateinit var navController: NavController
     private val viewModel by viewModels<ProfileViewModel>()
 
     override fun onCreateView(
@@ -34,16 +40,36 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        navController = findNavController()
+        albumAdapter = AlbumAdapter {
+            navController.navigate(ProfileFragmentDirections.actionProfileFragmentToAlbumDetails(it))
+        }
+        setAlbumsRecycler()
+        observeProfileState()
+
+
+    }
+
+    private fun setAlbumsRecycler() {
+        val albumsLayoutManager = LinearLayoutManager(requireContext())
+        albumsLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        binding.rv.apply {
+            adapter = albumAdapter
+            layoutManager = albumsLayoutManager
+        }
+    }
+
+    private fun observeProfileState() {
         collectLatestLifeCycleFlow(viewModel.profileStat) { profileState ->
             profileState.albums.let {
-                Timber.e(it.toString())
+                albumAdapter.submitList(it)
             }
             profileState.user.let {
-                Timber.e(it.address)
+                binding.user = it
             }
-            profileState.loading.let {
-                Timber.e(it.toString())
-            }
+
+            binding.progressBar visibleIf profileState.loading
+
             profileState.errorMessage.let {
                 Timber.e(it)
             }
