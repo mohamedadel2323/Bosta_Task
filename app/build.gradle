@@ -24,10 +24,17 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.typicode.com/\"")
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.typicode.com/\"")
         }
     }
     buildFeatures{
         dataBinding true
+        buildConfig = true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -53,6 +60,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     //Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2"
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.16.0'
     //Navigation Component
@@ -63,6 +72,8 @@ dependencies {
     //Hilt
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.44"
+    //Logging Interceptor
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
