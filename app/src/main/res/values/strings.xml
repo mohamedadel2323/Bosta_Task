@@ -7,4 +7,6 @@
     <string name="repellendus_praesentium_debitis_officiis">repellendus praesentium debitis officiis</string>
     <string name="my_albums">My Albums</string>
     <string name="search_in_images">Search in images</string>
+    <string name="zoomable_image">Zoomable Image</string>
+    <string name="share_button">Share Button</string>
 </resources>
