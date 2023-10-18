@@ -1,6 +1,7 @@
 package com.example.bostastask.imageviewer
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.GestureDetector
 import androidx.fragment.app.Fragment
@@ -36,9 +37,31 @@ class ImageViewerFragment : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "QueryPermissionsNeeded")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.image = args.image
+
+        setGesturesListeners()
+
+        binding.imageView.setOnTouchListener { _, event ->
+            scaleGestureDetector.onTouchEvent(event)
+            gestureDetector.onTouchEvent(event)
+            true
+        }
+
+        binding.shareBtn.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, args.image.url)
+            }
+            val chooser = Intent.createChooser(intent, "Share My Image ${args.image.title}")
+            if (intent.resolveActivity(requireActivity().packageManager) != null) {
+                startActivity(chooser)
+            }
+        }
+    }
+
+    private fun setGesturesListeners() {
         gestureDetector =
             GestureDetector(requireContext(), object : GestureDetector.SimpleOnGestureListener() {
                 override fun onDoubleTap(e: MotionEvent): Boolean {
@@ -64,10 +87,5 @@ class ImageViewerFragment : Fragment() {
                 }
             })
 
-        binding.imageView.setOnTouchListener { _, event ->
-            scaleGestureDetector.onTouchEvent(event)
-            gestureDetector.onTouchEvent(event)
-            true
-        }
     }
 }

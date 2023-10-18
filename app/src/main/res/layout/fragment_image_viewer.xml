@@ -27,7 +27,7 @@
             android:text="@{image.title}"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="@dimen/_25ssp"
+            android:textSize="@dimen/_18ssp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,6 +45,7 @@
             app:layout_constraintTop_toBottomOf="@id/imageTitle" />
 
         <ImageView
+            android:contentDescription="@string/zoomable_image"
             android:id="@+id/imageView"
             url="@{image.url}"
             android:layout_width="match_parent"
@@ -53,6 +54,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/line" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/shareBtn"
+            android:layout_width="wrap_content"
+            android:contentDescription="@string/share_button"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_16ssp"
+            android:elevation="@dimen/_5ssp"
+            android:src="@drawable/share_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

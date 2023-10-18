@@ -3,4 +3,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="line_color">#43686060</color>
+    <color name="search_back">#77FFFFFF</color>
 </resources>
