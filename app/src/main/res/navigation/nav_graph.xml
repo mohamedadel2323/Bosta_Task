@@ -22,5 +22,17 @@
         <argument
             android:name="album"
             app:argType="com.example.bostastask.profile.presentation.models.AlbumUiModel" />
+        <action
+            android:id="@+id/action_albumDetails_to_imageViewerFragment"
+            app:destination="@id/imageViewerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageViewerFragment"
+        android:name="com.example.bostastask.imageviewer.ImageViewerFragment"
+        android:label="ImageViewerFragment"
+        tools:layout="@layout/fragment_image_viewer" >
+        <argument
+            android:name="image"
+            app:argType="com.example.bostastask.albumdetails.presentation.models.PhotoUiModel" />
     </fragment>
 </navigation>

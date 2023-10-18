@@ -24,11 +24,15 @@ class PhotosAdapter(private val selectPhoto: (PhotoUiModel) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val photo = getItem(position)
+        holder.bind(photo)
+        holder.binding.root.setOnClickListener {
+            selectPhoto(photo)
+        }
     }
 }
 
-class PhotoViewHolder(private val binding: PhotoListItemBinding) :
+class PhotoViewHolder(val binding: PhotoListItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(photo: PhotoUiModel) {
         binding.photo = photo

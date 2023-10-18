@@ -12,6 +12,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.bostastask.R
@@ -29,6 +31,7 @@ class AlbumDetailsFragment : Fragment() {
     private lateinit var binding: FragmentAlbumDetailsBinding
     private lateinit var photosAdapter: PhotosAdapter
     private val viewModel: AlbumDetailVewModel by viewModels()
+    private lateinit var navController: NavController
     private val args by navArgs<AlbumDetailsFragmentArgs>()
 
     override fun onCreateView(
@@ -42,9 +45,16 @@ class AlbumDetailsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        navController = findNavController()
+
         binding.album = args.album
         photosAdapter = PhotosAdapter {
-
+            navController.navigate(
+                AlbumDetailsFragmentDirections.actionAlbumDetailsToImageViewerFragment(
+                    it
+                )
+            )
         }
         setPhotosRecycler()
         observeDetailsState(view)

@@ -91,6 +91,7 @@
             android:layout_marginTop="@dimen/_16ssp"
             android:fontFamily="sans-serif-condensed"
             android:paddingStart="@dimen/_5ssp"
+            android:paddingEnd="@dimen/_5ssp"
             android:text="@string/my_albums"
             android:textAlignment="textStart"
             android:textColor="@color/black"
