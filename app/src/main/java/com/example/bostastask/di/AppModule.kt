@@ -1,10 +1,13 @@
 package com.example.bostastask.di
 
+import android.content.Context
 import com.example.bostastask.BuildConfig.BASE_URL
 import com.example.bostastask.data.remote.PlaceholderApiService
+import com.example.bostastask.utils.NetworkConnectivityObserver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -43,4 +46,9 @@ object AppModule {
             ).build()
             .create(PlaceholderApiService::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideConnectivityObserver(@ApplicationContext context: Context): NetworkConnectivityObserver =
+        NetworkConnectivityObserver(context = context)
 }
