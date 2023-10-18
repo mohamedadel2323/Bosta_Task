@@ -8,7 +8,9 @@ import com.example.bostastask.profile.presentation.mappers.toUserUiModel
 import com.example.bostastask.utils.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -24,7 +26,10 @@ class ProfileViewModel @Inject constructor(private val profileUseCase: ProfileUs
 
     private val _profileState: MutableStateFlow<ProfileState.Display> =
         MutableStateFlow(ProfileState.Display())
-    val profileStat = _profileState.asStateFlow()
+    val profileState = _profileState.asStateFlow()
+
+    private val _errorState: MutableSharedFlow<ProfileState.Error> = MutableSharedFlow()
+    val errorState = _errorState.asSharedFlow()
 
 
     private fun fetchUserData() {
@@ -45,10 +50,9 @@ class ProfileViewModel @Inject constructor(private val profileUseCase: ProfileUs
 
                     is Response.Failure -> {
                         response.error?.let { errorMessage ->
-                            _profileState.update {
-                                it.copy(errorMessage = errorMessage, loading = false)
-                            }
+                            _errorState.emit(ProfileState.Error(errorMessage))
                         }
+                        _profileState.update { it.copy(loading = false) }
                     }
 
                     else -> {}
@@ -66,15 +70,19 @@ class ProfileViewModel @Inject constructor(private val profileUseCase: ProfileUs
                     is Response.Success -> {
                         response.data?.let {
                             _profileState.update { state ->
-                                state.copy(albums = response.data.map { it.toAlbumUiModel() }, loading = false)
+                                state.copy(
+                                    albums = response.data.map { it.toAlbumUiModel() },
+                                    loading = false
+                                )
                             }
                         }
                     }
 
                     is Response.Failure -> {
                         response.error?.let { errorMessage ->
-                            _profileState.update { it.copy(errorMessage = errorMessage) }
+                            _errorState.emit(ProfileState.Error(errorMessage))
                         }
+                        _profileState.update { it.copy(loading = false) }
                     }
 
                     else -> {}

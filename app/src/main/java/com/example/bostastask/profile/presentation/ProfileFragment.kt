@@ -16,11 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bostastask.R
 import com.example.bostastask.databinding.FragmentProfileBinding
 import com.example.bostastask.utils.visibleIf
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -45,7 +45,7 @@ class ProfileFragment : Fragment() {
             navController.navigate(ProfileFragmentDirections.actionProfileFragmentToAlbumDetails(it))
         }
         setAlbumsRecycler()
-        observeProfileState()
+        observeProfileState(view)
 
 
     }
@@ -59,8 +59,8 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun observeProfileState() {
-        collectLatestLifeCycleFlow(viewModel.profileStat) { profileState ->
+    private fun observeProfileState(view: View) {
+        collectLatestLifeCycleFlow(viewModel.profileState) { profileState ->
             profileState.albums.let {
                 albumAdapter.submitList(it)
             }
@@ -69,9 +69,11 @@ class ProfileFragment : Fragment() {
             }
 
             binding.progressBar visibleIf profileState.loading
+        }
 
-            profileState.errorMessage.let {
-                Timber.e(it)
+        collectLifeCycleFlow(viewModel.errorState) { errorState ->
+            errorState.errorMessage.let {
+                Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
             }
         }
     }
@@ -80,6 +82,14 @@ class ProfileFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 flow.collectLatest(collect)
+            }
+        }
+    }
+
+    private fun <T> collectLifeCycleFlow(flow: Flow<T>, collect: suspend (T) -> Unit) {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                flow.collect(collect)
             }
         }
     }

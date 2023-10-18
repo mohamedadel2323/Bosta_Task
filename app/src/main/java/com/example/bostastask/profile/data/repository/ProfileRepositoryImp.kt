@@ -19,23 +19,28 @@ class ProfileRepositoryImp @Inject constructor(
 ) : IProfileRepository {
 
     override suspend fun getUsers(userId: Int): Response<UserDomainModel> =
-        try {
-            Response.Success(
-                usersRemoteSource.getUsers<UserResponse>(userId).data?.first()?.toUserDomainModel()
-                    ?: UserDomainModel(1,"", AddressDomainModel("", "", "", ""))
+        when (val response = usersRemoteSource.getUsers<UserResponse>(userId)) {
+            is Response.Success -> Response.Success(
+                response.data?.first()?.toUserDomainModel()
+                    ?: UserDomainModel(1, "", AddressDomainModel("", "", "", ""))
             )
-        } catch (e: Exception) {
-            Response.Failure(e.message ?: "Unknown")
+
+            is Response.Failure -> Response.Failure(response.error ?: "Unknown")
+
+            else -> Response.Loading()
         }
 
 
     override suspend fun getAlbums(userId: Int): Response<List<AlbumDomainModel>> =
-        try {
-            Response.Success(
-                albumsRemoteSource.getAlbums<AlbumResponse>(userId).data?.toAlbumDomainResponse()
+        when (val response = albumsRemoteSource.getAlbums<AlbumResponse>(userId)) {
+            is Response.Success -> Response.Success(
+                response.data?.toAlbumDomainResponse()
                     ?: listOf()
             )
-        } catch (e: Exception) {
-            Response.Failure(e.message ?: "Unknown")
+
+            is Response.Failure -> Response.Failure(response.error ?: "Unknown")
+            else -> {
+                Response.Loading()
+            }
         }
 }

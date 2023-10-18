@@ -11,6 +11,7 @@ interface PlaceholderApiService {
         const val USERS = "users"
         const val ID = "id"
         const val USER_ID = "userId"
+        const val ALBUM_ID = "albumId"
         const val ALBUMS = "albums"
         const val PHOTOS = "photos"
     }
@@ -22,5 +23,5 @@ interface PlaceholderApiService {
     suspend fun getAlbums(@Query(USER_ID) userId: Int): AlbumResponse
 
     @GET(PHOTOS)
-    suspend fun getPhotos(): PhotoResponse
+    suspend fun getPhotos(@Query(ALBUM_ID) albumId: Int): PhotoResponse
 }

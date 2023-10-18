@@ -8,6 +8,9 @@ sealed interface ProfileState {
         val user: UserUiModel = UserUiModel(1, "", ""),
         val albums: List<AlbumUiModel> = listOf(),
         val loading: Boolean = false,
+    ) : ProfileState
+
+    data class Error(
         val errorMessage: String = ""
     ) : ProfileState
 }
