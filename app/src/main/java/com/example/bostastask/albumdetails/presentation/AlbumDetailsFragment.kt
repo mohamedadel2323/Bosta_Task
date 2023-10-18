@@ -22,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+
 @AndroidEntryPoint
 class AlbumDetailsFragment : Fragment() {
 
@@ -72,12 +73,10 @@ class AlbumDetailsFragment : Fragment() {
 
     private fun observeDetailsState(view: View) {
         collectLatestLifeCycleFlow(viewModel.detailsState) { detailsState ->
-            detailsState.photos.let {
+            detailsState.filteredPhotos.let {
                 photosAdapter.submitList(it)
             }
-            if (detailsState.filteredPhotos.isNotEmpty()) {
-                photosAdapter.submitList(detailsState.filteredPhotos)
-            }
+
             binding.progressBar visibleIf detailsState.loading
         }
 

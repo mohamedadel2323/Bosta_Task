@@ -37,6 +37,7 @@ class AlbumDetailVewModel @Inject constructor(private val photosUseCase: PhotosU
                             _detailsState.update { state ->
                                 state.copy(
                                     photos = photos.map { it.toPhotoUiModel() },
+                                    filteredPhotos = photos.map { it.toPhotoUiModel() },
                                     loading = false
                                 )
                             }
