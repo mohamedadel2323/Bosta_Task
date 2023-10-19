@@ -7,5 +7,8 @@ fun UserDomainModel.toUserUiModel(): UserUiModel =
     UserUiModel(
         userId = this.userId,
         userName = this.userName,
-        address = "${this.address.street}, ${this.address.suite}, ${this.address.city}, ${this.address.zipCode}"
+        address = formatAddress(this)
     )
+
+private fun formatAddress(user: UserDomainModel) =
+    "${user.address.street}, ${user.address.suite}, ${user.address.city}, ${user.address.zipCode}"

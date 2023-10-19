@@ -11,6 +11,8 @@ import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.bostastask.R
 import com.example.bostastask.databinding.FragmentImageViewerBinding
@@ -18,6 +20,7 @@ import com.example.bostastask.databinding.FragmentImageViewerBinding
 class ImageViewerFragment : Fragment() {
 
     private lateinit var binding: FragmentImageViewerBinding
+    private lateinit var navController: NavController
     private val args by navArgs<ImageViewerFragmentArgs>()
     private lateinit var scaleGestureDetector: ScaleGestureDetector
     private lateinit var gestureDetector: GestureDetector
@@ -37,11 +40,20 @@ class ImageViewerFragment : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("ClickableViewAccessibility", "QueryPermissionsNeeded")
+    @SuppressLint("QueryPermissionsNeeded")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        navController = findNavController()
+
         binding.image = args.image
 
         setGesturesListeners()
+
+        setListeners()
+    }
+
+    @SuppressLint("QueryPermissionsNeeded", "ClickableViewAccessibility")
+    private fun setListeners() {
 
         binding.imageView.setOnTouchListener { _, event ->
             scaleGestureDetector.onTouchEvent(event)
@@ -59,6 +71,10 @@ class ImageViewerFragment : Fragment() {
                 startActivity(chooser)
             }
         }
+
+        binding.backBtn.setOnClickListener {
+            navController.navigateUp()
+        }
     }
 
     private fun setGesturesListeners() {
@@ -66,6 +82,10 @@ class ImageViewerFragment : Fragment() {
             GestureDetector(requireContext(), object : GestureDetector.SimpleOnGestureListener() {
                 override fun onDoubleTap(e: MotionEvent): Boolean {
                     scaleFactor = if (scaleFactor == 1.0f) 2.0f else 1.0f
+
+                    binding.imageView.pivotX = e.x
+                    binding.imageView.pivotY = e.y
+
                     binding.imageView.scaleX = scaleFactor
                     binding.imageView.scaleY = scaleFactor
                     return true
@@ -81,11 +101,13 @@ class ImageViewerFragment : Fragment() {
                     scaleFactor = 1.0f.coerceAtLeast(scaleFactor)
                     scaleFactor = 2.0f.coerceAtMost(scaleFactor)
 
+                    binding.imageView.pivotX = detector.focusX
+                    binding.imageView.pivotY = detector.focusY
+
                     binding.imageView.scaleX = scaleFactor
                     binding.imageView.scaleY = scaleFactor
                     return true
                 }
             })
-
     }
 }

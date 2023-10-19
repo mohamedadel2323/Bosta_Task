@@ -16,6 +16,18 @@
         tools:context=".imageviewer.ImageViewerFragment">
 
 
+        <ImageButton
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/transparent"
+            android:contentDescription="@string/back_button"
+            android:src="@drawable/back"
+            app:layout_constraintBottom_toBottomOf="@id/imageTitle"
+            app:layout_constraintEnd_toStartOf="@id/imageTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/imageTitle" />
+
         <TextView
             android:id="@+id/imageTitle"
             android:layout_width="0dp"
@@ -30,7 +42,7 @@
             android:textSize="@dimen/_18ssp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/backBtn"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/repellendus_praesentium_debitis_officiis" />
 
@@ -45,11 +57,11 @@
             app:layout_constraintTop_toBottomOf="@id/imageTitle" />
 
         <ImageView
-            android:contentDescription="@string/zoomable_image"
             android:id="@+id/imageView"
             url="@{image.url}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:contentDescription="@string/zoomable_image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,9 +70,9 @@
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/shareBtn"
             android:layout_width="wrap_content"
-            android:contentDescription="@string/share_button"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_16ssp"
+            android:contentDescription="@string/share_button"
             android:elevation="@dimen/_5ssp"
             android:src="@drawable/share_icon"
             app:layout_constraintBottom_toBottomOf="parent"

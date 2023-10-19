@@ -49,16 +49,20 @@ class AlbumDetailsFragment : Fragment() {
         navController = findNavController()
 
         binding.album = args.album
-        photosAdapter = PhotosAdapter {
-            navController.navigate(
-                AlbumDetailsFragmentDirections.actionAlbumDetailsToImageViewerFragment(
-                    it
-                )
-            )
-        }
+
         setPhotosRecycler()
+
         observeDetailsState(view)
+
         viewModel.getPhotos(args.album.id)
+
+        setListeners()
+    }
+
+    private fun setListeners() {
+        binding.backBtn.setOnClickListener {
+            navController.navigateUp()
+        }
 
         binding.searchView.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -73,6 +77,15 @@ class AlbumDetailsFragment : Fragment() {
     }
 
     private fun setPhotosRecycler() {
+
+        photosAdapter = PhotosAdapter {
+            navController.navigate(
+                AlbumDetailsFragmentDirections.actionAlbumDetailsToImageViewerFragment(
+                    it
+                )
+            )
+        }
+
         val photosLayoutManager = GridLayoutManager(requireContext(), 3)
         photosLayoutManager.orientation = GridLayoutManager.VERTICAL
         binding.rv.apply {
