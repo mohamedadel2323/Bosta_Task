@@ -18,7 +18,7 @@ class NetworkConnectivityObserver(
 
      fun observe(): Flow<Status> {
         return callbackFlow {
-            launch { send(Status.Available) }
+            launch { send(Status.Unavailable) }
             val callback = object : ConnectivityManager.NetworkCallback() {
                 override fun onAvailable(network: Network) {
                     super.onAvailable(network)

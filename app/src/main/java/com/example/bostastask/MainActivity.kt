@@ -11,6 +11,7 @@ import com.example.bostastask.utils.NetworkConnectivityObserver
 import com.example.bostastask.utils.Status
 import com.example.bostastask.utils.visibleIf
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeToConnectivity() {
         collectLatestLifeCycleFlow(networkConnectivityObserver.observe()) {
+            delay(200)
             binding.noConnectionAnimation visibleIf (it == Status.Lost || it == Status.Unavailable)
         }
     }
