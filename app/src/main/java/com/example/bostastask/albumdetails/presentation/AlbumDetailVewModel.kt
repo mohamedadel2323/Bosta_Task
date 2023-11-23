@@ -13,15 +13,11 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class AlbumDetailVewModel @Inject constructor(private val photosUseCase: PhotosUseCase) :
-    ViewModel() {
-
-    private val _detailsState: MutableStateFlow<DetailsState.Display> =
-        MutableStateFlow(DetailsState.Display())
+class AlbumDetailVewModel @Inject constructor(private val photosUseCase: PhotosUseCase) : ViewModel() {
+    private val _detailsState: MutableStateFlow<DetailsState.Display> = MutableStateFlow(DetailsState.Display())
     val detailsState = _detailsState.asStateFlow()
 
     private val _errorState: MutableSharedFlow<DetailsState.Error> = MutableSharedFlow()
@@ -43,21 +39,16 @@ class AlbumDetailVewModel @Inject constructor(private val photosUseCase: PhotosU
                             }
                         }
                     }
-
                     is Response.Failure -> {
                         response.error?.let { errorMessage ->
-                            Timber.e(errorMessage)
                             _errorState.emit(DetailsState.Error(errorMessage))
                         }
                         _detailsState.update { it.copy(loading = false) }
                     }
-
-                    else -> {}
                 }
             }
         }
     }
-
     fun searchByTitle(key: String) {
         _detailsState.update { state ->
             state.copy(

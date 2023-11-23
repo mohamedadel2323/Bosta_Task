@@ -1,8 +1,8 @@
 package com.example.bostastask.albumdetails.data.remote
 
-import com.example.bostastask.utils.Response
+import com.example.bostastask.albumdetails.data.dto.photos.PhotosResponse
 
 
 interface PhotosRemoteSource {
-    suspend fun <T> getPhotos(albumId: Int): Response<T>
+    suspend fun getPhotos(albumId: Int): PhotosResponse
 }

@@ -1,6 +1,6 @@
 package com.example.bostastask.data.remote
 
-import com.example.bostastask.albumdetails.data.dto.photos.PhotoResponse
+import com.example.bostastask.albumdetails.data.dto.photos.PhotosResponse
 import com.example.bostastask.profile.data.dto.album.AlbumResponse
 import com.example.bostastask.profile.data.dto.user.UserResponse
 import retrofit2.http.GET
@@ -23,5 +23,5 @@ interface PlaceholderApiService {
     suspend fun getAlbums(@Query(USER_ID) userId: Int): AlbumResponse
 
     @GET(PHOTOS)
-    suspend fun getPhotos(@Query(ALBUM_ID) albumId: Int): PhotoResponse
+    suspend fun getPhotos(@Query(ALBUM_ID) albumId: Int): PhotosResponse
 }

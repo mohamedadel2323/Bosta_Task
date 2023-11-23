@@ -24,15 +24,13 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
-
     private lateinit var binding: FragmentProfileBinding
     private lateinit var albumAdapter: AlbumAdapter
     private lateinit var navController: NavController
     private val viewModel by viewModels<ProfileViewModel>()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
@@ -46,8 +44,6 @@ class ProfileFragment : Fragment() {
         }
         setAlbumsRecycler()
         observeProfileState(view)
-
-
     }
 
     private fun setAlbumsRecycler() {
@@ -61,20 +57,12 @@ class ProfileFragment : Fragment() {
 
     private fun observeProfileState(view: View) {
         collectLatestLifeCycleFlow(viewModel.profileState) { profileState ->
-            profileState.albums.let {
-                albumAdapter.submitList(it)
-            }
-            profileState.user.let {
-                binding.user = it
-            }
-
+            profileState.albums.let { albumAdapter.submitList(it) }
+            profileState.user.let { binding.user = it }
             binding.progressBar visibleIf profileState.loading
         }
-
         collectLifeCycleFlow(viewModel.errorState) { errorState ->
-            errorState.errorMessage.let {
-                Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
-            }
+            Snackbar.make(view, errorState.errorMessage, Snackbar.LENGTH_SHORT).show()
         }
     }
 
@@ -85,7 +73,6 @@ class ProfileFragment : Fragment() {
             }
         }
     }
-
     private fun <T> collectLifeCycleFlow(flow: Flow<T>, collect: suspend (T) -> Unit) {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
