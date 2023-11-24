@@ -1,7 +1,6 @@
 package com.example.bostastask.albumdetails.data.mappers
 
 import com.example.bostastask.albumdetails.data.dto.photos.PhotoItem
-import com.example.bostastask.albumdetails.data.dto.photos.PhotosResponse
 import com.example.bostastask.albumdetails.domain.models.PhotoDomainModel
 
 fun PhotoItem.toPhotoDomainModel(): PhotoDomainModel =
@@ -12,5 +11,5 @@ fun PhotoItem.toPhotoDomainModel(): PhotoDomainModel =
         url = this.url ?: ""
     )
 
-fun PhotosResponse.toPhotoDomainResponse(): List<PhotoDomainModel> =
+fun List<PhotoItem>.toPhotoDomainResponse(): List<PhotoDomainModel> =
     this.map { it.toPhotoDomainModel() }

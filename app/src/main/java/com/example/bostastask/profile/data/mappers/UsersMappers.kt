@@ -9,12 +9,7 @@ fun UserItem.toUserDomainModel(): UserDomainModel =
     UserDomainModel(
         userId = this.id ?: 1,
         userName = this.userName ?: "",
-        address = this.address?.toAddressDomainModel() ?: AddressDomainModel(
-            "",
-            "",
-            "",
-            ""
-        )
+        address = this.address?.toAddressDomainModel() ?: AddressDomainModel("", "", "", "")
     )
 
 fun Address.toAddressDomainModel(): AddressDomainModel =

@@ -22,7 +22,6 @@ class AlbumDetailVewModel @Inject constructor(private val photosUseCase: PhotosU
 
     private val _errorState: MutableSharedFlow<DetailsState.Error> = MutableSharedFlow()
     val errorState = _errorState.asSharedFlow()
-
     fun getPhotos(albumId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             _detailsState.update { it.copy(loading = true) }

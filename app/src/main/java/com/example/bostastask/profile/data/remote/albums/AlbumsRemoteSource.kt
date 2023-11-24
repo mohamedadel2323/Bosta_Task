@@ -1,7 +1,7 @@
 package com.example.bostastask.profile.data.remote.albums
 
-import com.example.bostastask.profile.data.dto.album.AlbumResponse
+import com.example.bostastask.profile.data.dto.album.AlbumItem
 
 interface AlbumsRemoteSource {
-    suspend fun getAlbums(userId: Int): AlbumResponse
+    suspend fun getAlbums(userId: Int): List<AlbumItem>
 }

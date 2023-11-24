@@ -1,6 +1,6 @@
 package com.example.bostastask.profile.data.repository
 
-import com.example.bostastask.profile.data.mappers.toAlbumDomainModel
+import com.example.bostastask.profile.data.mappers.toAlbumDomainResponse
 import com.example.bostastask.profile.data.mappers.toUserDomainModel
 import com.example.bostastask.profile.data.remote.albums.AlbumsRemoteSource
 import com.example.bostastask.profile.data.remote.users.UsersRemoteSource
@@ -24,7 +24,7 @@ class ProfileRepositoryImp @Inject constructor(
 
     override suspend fun getAlbums(userId: Int): Response<List<AlbumDomainModel>> =
         try {
-            Response.Success(albumsRemoteSource.getAlbums(userId).map { it.toAlbumDomainModel() })
+            Response.Success(albumsRemoteSource.getAlbums(userId).toAlbumDomainResponse())
         }catch (e: Exception){
             Response.Failure(e.message?:"Unknown Error")
         }
