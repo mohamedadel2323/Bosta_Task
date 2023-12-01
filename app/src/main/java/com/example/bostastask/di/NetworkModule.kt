@@ -1,7 +1,8 @@
 package com.example.bostastask.di
 
 import android.content.Context
-import com.example.bostastask.BuildConfig.BASE_URL
+import com.example.bostastask.BuildConfig.PLACE_HOLDER_BASE_URL
+import com.example.bostastask.data.remote.ApiServiceManager
 import com.example.bostastask.data.remote.PlaceholderApiService
 import com.example.bostastask.utils.NetworkConnectivityObserver
 import dagger.Module
@@ -17,35 +18,26 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+object NetworkModule {
+    @Provides
+    @Singleton
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor =
+        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)
 
     @Provides
     @Singleton
-    fun providesLoggingInterceptor(): HttpLoggingInterceptor {
-        val logging = HttpLoggingInterceptor()
-        logging.setLevel(HttpLoggingInterceptor.Level.BASIC)
-        return logging
-    }
+    fun provideOkHttpClient(okHttpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
+        OkHttpClient.Builder().addInterceptor(okHttpLoggingInterceptor).build()
 
     @Provides
     @Singleton
-    fun providesOkHttpClient(okHttpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(okHttpLoggingInterceptor)
-            .build()
-    }
+    fun provideRetrofitHelper(okHttpClient: OkHttpClient): Retrofit.Builder =
+        Retrofit.Builder().client(okHttpClient).addConverterFactory(GsonConverterFactory.create())
 
     @Provides
     @Singleton
-    fun providePlaceHolderApi(okHttpClient: OkHttpClient): PlaceholderApiService {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(
-                GsonConverterFactory.create()
-            ).build()
-            .create(PlaceholderApiService::class.java)
-    }
+    fun providePlaceHolderApi(builder: Retrofit.Builder): PlaceholderApiService =
+        ApiServiceManager(builder).provideService(PlaceholderApiService::class.java, PLACE_HOLDER_BASE_URL)
 
     @Singleton
     @Provides
