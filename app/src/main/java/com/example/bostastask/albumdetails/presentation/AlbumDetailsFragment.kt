@@ -68,7 +68,7 @@ class AlbumDetailsFragment : Fragment() {
     }
 
     private fun searchByTitle(s: String) {
-        collectLifeCycleFlow(
+        collectLatestLifeCycleFlow(
             flow {
                 delay(1000L)
                 emit(s)
