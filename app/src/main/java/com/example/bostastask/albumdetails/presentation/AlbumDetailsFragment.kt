@@ -18,9 +18,7 @@ import com.example.bostastask.utils.collectLifeCycleFlow
 import com.example.bostastask.utils.visibleIf
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flow
 
 @AndroidEntryPoint
@@ -64,18 +62,17 @@ class AlbumDetailsFragment : Fragment() {
 
         binding.searchView.addTextChangedListener(object : TextWatcherAdapter() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                searchByTitle(s)
+                searchByTitle(s.toString().trim())
             }
         })
     }
 
-    @OptIn(FlowPreview::class)
-    private fun searchByTitle(s: CharSequence?) {
+    private fun searchByTitle(s: String) {
         collectLifeCycleFlow(
             flow {
                 delay(1000L)
-                emit(s.toString())
-            }.debounce(1000L)
+                emit(s)
+            }
         ) {
             viewModel.searchByTitle(it)
         }
