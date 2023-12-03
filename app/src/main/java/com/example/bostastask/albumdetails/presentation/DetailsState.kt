@@ -8,6 +8,7 @@ sealed interface DetailsState {
         val photos: List<PhotoUiModel> = listOf(),
         val filteredPhotos: List<PhotoUiModel> = listOf(),
         val loading: Boolean = false,
+        val noSearchMatch: Boolean = false
     ) : DetailsState
 
     data class Error(

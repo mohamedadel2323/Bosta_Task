@@ -48,12 +48,18 @@ class AlbumDetailVewModel @Inject constructor(private val photosUseCase: PhotosU
             }
         }
     }
+
     fun searchByTitle(key: String) {
         _detailsState.update { state ->
             state.copy(
                 filteredPhotos = _detailsState.value.photos.filter { photo ->
                     photo.title.startsWith(key.lowercase(), true)
                 }
+            )
+        }
+        _detailsState.update { state ->
+            state.copy(
+                noSearchMatch =  _detailsState.value.filteredPhotos.isEmpty()
             )
         }
     }

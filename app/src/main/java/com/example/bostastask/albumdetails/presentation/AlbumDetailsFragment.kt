@@ -7,21 +7,21 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.bostastask.R
 import com.example.bostastask.databinding.FragmentAlbumDetailsBinding
+import com.example.bostastask.utils.collectLatestLifeCycleFlow
+import com.example.bostastask.utils.collectLifeCycleFlow
 import com.example.bostastask.utils.visibleIf
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flow
 
 @AndroidEntryPoint
 class AlbumDetailsFragment : Fragment() {
@@ -64,9 +64,21 @@ class AlbumDetailsFragment : Fragment() {
 
         binding.searchView.addTextChangedListener(object : TextWatcherAdapter() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.searchByTitle(s.toString())
+                searchByTitle(s)
             }
         })
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun searchByTitle(s: CharSequence?) {
+        collectLifeCycleFlow(
+            flow {
+                delay(1000L)
+                emit(s.toString())
+            }.debounce(1000L)
+        ) {
+            viewModel.searchByTitle(it)
+        }
     }
 
     private fun setPhotosRecycler() {
@@ -89,32 +101,14 @@ class AlbumDetailsFragment : Fragment() {
 
     private fun observeDetailsState(view: View) {
         collectLatestLifeCycleFlow(viewModel.detailsState) { detailsState ->
-            detailsState.filteredPhotos.let {
-                photosAdapter.submitList(it)
-            }
-
+            detailsState.filteredPhotos.let { photosAdapter.submitList(it) }
             binding.progressBar visibleIf detailsState.loading
+            binding.noMatchString visibleIf detailsState.noSearchMatch
         }
 
         collectLifeCycleFlow(viewModel.errorState) { detailsState ->
             detailsState.errorMessage.let { errorMessage ->
                 Snackbar.make(view, errorMessage, Snackbar.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun <T> collectLatestLifeCycleFlow(flow: Flow<T>, collect: suspend (T) -> Unit) {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                flow.collectLatest(collect)
-            }
-        }
-    }
-
-    private fun <T> collectLifeCycleFlow(flow: Flow<T>, collect: suspend (T) -> Unit) {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                flow.collect(collect)
             }
         }
     }

@@ -3,11 +3,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="profile">Profile</string>
-    <string name="kattie_turnpike_suite_198_lebsackbury_31428_2261">Kattie Turnpike, Suite 198, Lebsackbury, 31428-2261</string>
+    <string name="kattie">Kattie Turnpike, Suite 198, Lebsackbury, 31428–2261</string>
     <string name="repellendus_praesentium_debitis_officiis">repellendus praesentium debitis officiis</string>
     <string name="my_albums">My Albums</string>
     <string name="search_in_images">Search in images</string>
     <string name="zoomable_image">Zoomable Image</string>
     <string name="share_button">Share Button</string>
     <string name="back_button">Back Button</string>
+    <string name="no_images_match_the_query">No Images Match the query</string>
 </resources>

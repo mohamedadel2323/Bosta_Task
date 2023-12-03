@@ -7,20 +7,16 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bostastask.R
 import com.example.bostastask.databinding.FragmentProfileBinding
+import com.example.bostastask.utils.collectLatestLifeCycleFlow
+import com.example.bostastask.utils.collectLifeCycleFlow
 import com.example.bostastask.utils.visibleIf
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -63,21 +59,6 @@ class ProfileFragment : Fragment() {
         }
         collectLifeCycleFlow(viewModel.errorState) { errorState ->
             Snackbar.make(view, errorState.errorMessage, Snackbar.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun <T> collectLatestLifeCycleFlow(flow: Flow<T>, collect: suspend (T) -> Unit) {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                flow.collectLatest(collect)
-            }
-        }
-    }
-    private fun <T> collectLifeCycleFlow(flow: Flow<T>, collect: suspend (T) -> Unit) {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                flow.collect(collect)
-            }
         }
     }
 }
